@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>彻底搞懂 MySQL 事务的隔离级别 - 蛋清小记</title><meta description="简介：MySQL的事务隔离级别一共有四个，分别是读未提交、读已提交、可重复读以及可串行化。  事前准备数据mysql&amp;gt; create table city(     -&amp;gt; id int(10) auto_increment,&amp;lt;&amp;#x2F;span&amp;gt;     -&amp;gt; name varchar(30),&amp;lt;&amp;#x2F;span&amp;gt;     -&amp;gt; primary key (id)"><meta property="og:type" content="blog"><meta property="og:title" content="彻底搞懂 MySQL 事务的隔离级别"><meta property="og:url" content="http://yoursite.com/2020/12/30/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%20MySQL%20%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/"><meta property="og:site_name" content="蛋清小记"><meta property="og:description" content="简介：MySQL的事务隔离级别一共有四个，分别是读未提交、读已提交、可重复读以及可串行化。  事前准备数据mysql&amp;gt; create table city(     -&amp;gt; id int(10) auto_increment,&amp;lt;&amp;#x2F;span&amp;gt;     -&amp;gt; name varchar(30),&amp;lt;&amp;#x2F;span&amp;gt;     -&amp;gt; primary key (id)"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg"><meta property="article:published_time" content="2020-12-30T07:06:44.525Z"><meta property="article:modified_time" content="2020-12-30T07:06:44.525Z"><meta property="article:author" content="蛋清小记"><meta property="article:tag" content="Mysql"><meta property="article:tag" content="数据库"><meta property="article:tag" content="数据库事务"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://yoursite.com/2020/12/30/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%20MySQL%20%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/"},"headline":"蛋清小记","image":[],"datePublished":"2020-12-30T07:06:44.525Z","dateModified":"2020-12-30T07:06:44.525Z","author":{"@type":"Person","name":"蛋清小记"},"description":"简介：MySQL的事务隔离级别一共有四个，分别是读未提交、读已提交、可重复读以及可串行化。  事前准备数据mysql&gt; create table city(     -&gt; id int(10) auto_increment,&lt;&#x2F;span&gt;     -&gt; name varchar(30),&lt;&#x2F;span&gt;     -&gt; primary key (id)"}</script><link rel="canonical" href="http://yoursite.com/2020/12/30/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%20MySQL%20%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/"><link rel="icon" href="https://img.alicdn.com/imgextra/i2/3484326495/O1CN010Q7a1S1xql4AaZ5zA_!!3484326495-2-daren.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><meta name="generator" content="Hexo 5.1.1"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="蛋清小记" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span><span class="level-item">17 分钟读完 (大约2528个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">彻底搞懂 MySQL 事务的隔离级别</h1><div class="content"><blockquote>
+<p><strong>简介：</strong>MySQL的事务隔离级别一共有四个，分别是读未提交、读已提交、可重复读以及可串行化。</p>
+</blockquote>
+<h2 id="事前准备数据"><a href="#事前准备数据" class="headerlink" title="事前准备数据"></a>事前准备数据</h2><pre><code>mysql&gt; create table city(
+    -&gt; id int(10) auto_increment,&lt;/span&gt;
+    -&gt; name varchar(30),&lt;/span&gt;
+    -&gt; primary key (id)&lt;/span&gt;
+    -&gt; )engine=innodb charset=utf8mb4;&lt;/span&gt;
+
+insert into city(name) values(&lt;span class=&quot;hljs-emphasis&quot;&gt;&#39;武汉市&#39;&lt;/span&gt;);
+
+mysql&gt; select * from city;
++----+-----------+
+| id | name |
++----+-----------+
+| 1 | 武汉市 |
++----+-----------+</code></pre>
+<a id="more"></a>
+<h2 id="事务并发可能出现的情况"><a href="#事务并发可能出现的情况" class="headerlink" title="事务并发可能出现的情况"></a>事务并发可能出现的情况</h2><h4 id="脏读（Dirty-Read）"><a href="#脏读（Dirty-Read）" class="headerlink" title="脏读（Dirty Read）"></a>脏读（Dirty Read）</h4><blockquote>
+<p>一个事务读到了另一个未提交事务修改过的数据</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/04/32495/Wcv8DTijTL.png!large" alt="从根上理解MySQL事务的隔离级别" title="从根上理解MySQL事务的隔离级别"></p>
+<blockquote>
+<p>会话B开启一个事务，把id=1的name为武汉市修改成温州市，此时另外一个会话A也开启一个事务，读取id=1的name，此时的查询结果为温州市，会话B的事务最后回滚了刚才修改的记录，这样会话A读到的数据是不存在的，这个现象就是脏读。（脏读只在读未提交隔离级别才会出现）</p>
+</blockquote>
+<h4 id="不可重复读（Non-Repeatable-Read）"><a href="#不可重复读（Non-Repeatable-Read）" class="headerlink" title="不可重复读（Non-Repeatable Read）"></a>不可重复读（Non-Repeatable Read）</h4><blockquote>
+<p>一个事务只能读到另一个已经提交的事务修改过的数据，并且其他事务每对该数据进行一次修改并提交后，该事务都能查询得到最新值。（不可重复读在读未提交和读已提交隔离级别都可能会出现）</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/YdNemia6wc.png!large" alt="从根上理解 MySQL 事务的隔离级别" title="从根上理解 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>会话A开启一个事务，查询id=1的结果，此时查询的结果name为武汉市。接着会话B把id=1的name修改为温州市（隐式事务，因为此时的autocommit为1，每条SQL语句执行完自动提交），此时会话A的事务再一次查询id=1的结果，读取的结果name为温州市。会话B再此修改id=1的name为杭州市，会话A的事务再次查询id=1，结果name的值为杭州市，这种现象就是不可重复读。</p>
+</blockquote>
+<h4 id="幻读（Phantom）"><a href="#幻读（Phantom）" class="headerlink" title="幻读（Phantom）"></a>幻读（Phantom）</h4><blockquote>
+<p>一个事务先根据某些条件查询出一些记录，之后另一个事务又向表中插入了符合这些条件的记录，原先的事务再次按照该条件查询时，能把另一个事务插入的记录也读出来。（幻读在读未提交、读已提交、可重复读隔离级别都可能会出现）</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/04/32495/0sCtxw1Jno.png!large" alt="从根上理解 MySQL 事务的隔离级别" title="从根上理解 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>会话A开启一个事务，查询id&gt;0的记录，此时会查到name=武汉市的记录。接着会话B插入一条name=温州市的数据（隐式事务，因为此时的autocommit为1，每条SQL语句执行完自动提交），这时会话A的事务再以刚才的查询条件（id&gt;0）再一次查询，此时会出现两条记录（name为武汉市和温州市的记录），这种现象就是幻读。</p>
+</blockquote>
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><blockquote>
+<p>MySQL的事务隔离级别一共有四个，分别是读未提交、读已提交、可重复读以及可串行化。</p>
+<p>MySQL的隔离级别的作用就是让事务之间互相隔离，互不影响，这样可以保证事务的一致性。</p>
+<p>隔离级别比较：可串行化&gt;可重复读&gt;读已提交&gt;读未提交</p>
+<p>隔离级别对性能的影响比较：可串行化&gt;可重复读&gt;读已提交&gt;读未提交</p>
+<p>由此看出，隔离级别越高，所需要消耗的MySQL性能越大（如事务并发严重性），为了平衡二者，一般建议设置的隔离级别为可重复读，MySQL默认的隔离级别也是可重复读。</p>
+</blockquote>
+<h4 id="读未提交（READ-UNCOMMITTED）"><a href="#读未提交（READ-UNCOMMITTED）" class="headerlink" title="读未提交（READ UNCOMMITTED）"></a>读未提交（READ UNCOMMITTED）</h4><p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/iL6jfZxiHJ.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>在读未提交隔离级别下，事务A可以读取到事务B修改过但未提交的数据。</p>
+<p>可能发生脏读、不可重复读和幻读问题，一般很少使用此隔离级别。</p>
+</blockquote>
+<h4 id="读已提交（READ-COMMITTED）"><a href="#读已提交（READ-COMMITTED）" class="headerlink" title="读已提交（READ COMMITTED）"></a>读已提交（READ COMMITTED）</h4><p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/BsMcuysaIB.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>在读已提交隔离级别下，事务B只能在事务A修改过并且已提交后才能读取到事务B修改的数据。</p>
+<p>读已提交隔离级别解决了脏读的问题，但可能发生不可重复读和幻读问题，一般很少使用此隔离级别。</p>
+</blockquote>
+<h4 id="可重复读（REPEATABLE-READ）"><a href="#可重复读（REPEATABLE-READ）" class="headerlink" title="可重复读（REPEATABLE READ）"></a>可重复读（REPEATABLE READ）</h4><p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/yjRtVOpMBZ.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>在可重复读隔离级别下，事务B只能在事务A修改过数据并提交后，自己也提交事务后，才能读取到事务B修改的数据。</p>
+<p>可重复读隔离级别解决了脏读和不可重复读的问题，但可能发生幻读问题。</p>
+<p>提问：为什么上了写锁（写操作），别的事务还可以读操作？</p>
+<p>因为InnoDB有MVCC机制（多版本并发控制），可以使用快照读，而不会被阻塞。</p>
+</blockquote>
+<h4 id="可串行化（SERIALIZABLE）"><a href="#可串行化（SERIALIZABLE）" class="headerlink" title="可串行化（SERIALIZABLE）"></a>可串行化（SERIALIZABLE）</h4><p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/S0Y1nk8yv6.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/LIfaeTxwPL.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/q4vVuHzqO0.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/l1BwLlDlYp.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>各种问题（脏读、不可重复读、幻读）都不会发生，通过加锁实现（读锁和写锁）。</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/9Lpt4gaGNi.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/2yNLgxMBp9.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<h2 id="隔离级别的实现原理"><a href="#隔离级别的实现原理" class="headerlink" title="隔离级别的实现原理"></a>隔离级别的实现原理</h2><blockquote>
+<p>使用MySQL的默认隔离级别（可重复读）来进行说明。</p>
+<p>每条记录在更新的时候都会同时记录一条回滚操作（回滚操作日志undo log）。同一条记录在系统中可以存在多个版本，这就是数据库的多版本并发控制（MVCC）。即通过回滚（rollback操作），可以回到前一个状态的值。</p>
+<p>假设一个值从 1 被按顺序改成了 2、3、4，在回滚日志里面就会有类似下面的记录。</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/202002/05/32495/mfZfSEBBSn.png!large" alt="彻底搞懂 MySQL 事务的隔离级别" title="彻底搞懂 MySQL 事务的隔离级别"></p>
+<blockquote>
+<p>当前值是 4，但是在查询这条记录的时候，不同时刻启动的事务会有不同的 read-view。如图中看到的，在视图 A、B、C 里面，这一个记录的值分别是 1、2、4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。对于 read-view A，要得到 1，就必须将当前值依次执行图中所有的回滚操作得到。</p>
+<p>同时你会发现，即使现在有另外一个事务正在将 4 改成 5，这个事务跟 read-view A、B、C 对应的事务是不会冲突的。</p>
+<p>提问：回滚操作日志（undo log）什么时候删除？</p>
+<p>MySQL会判断当没有事务需要用到这些回滚日志的时候，回滚日志会被删除。</p>
+<p>提问：什么时候不需要了？</p>
+<p>当系统里么有比这个回滚日志更早的read-view的时候。</p>
+</blockquote>
+<h2 id="查看当前会话隔离级别"><a href="#查看当前会话隔离级别" class="headerlink" title="查看当前会话隔离级别"></a>查看当前会话隔离级别</h2><h4 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h4><pre><code>命令：SHOW VARIABLES LIKE &#39;transaction_isolation&#39;;
+
+mysql&gt; show variables like &#39;transaction_isolation&#39;;
++-----------------------+--------------+&lt;/span&gt;
+| Variable_name  | Value |
++-----------------------+--------------+&lt;/span&gt;
+| transaction_isolation | SERIALIZABLE |
++-----------------------+--------------+&lt;/span&gt;`&lt;/pre&gt;</code></pre>
+<h4 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h4><pre><code>命令：SELECT @@transaction_isolation;
+
+mysql&gt; select @@transaction_isolation;
++-------------------------+&lt;/span&gt;
+| @@transaction_isolation |
++-------------------------+&lt;/span&gt;
+| SERIALIZABLE            |
++-------------------------+&lt;/span&gt;`&lt;/pre&gt;</code></pre>
+<h2 id="设置隔离级别"><a href="#设置隔离级别" class="headerlink" title="设置隔离级别"></a>设置隔离级别</h2><h4 id="方式1：通过set命令"><a href="#方式1：通过set命令" class="headerlink" title="方式1：通过set命令"></a>方式1：通过set命令</h4><pre><code>SET [GLOBAL|SESSION] TRANSACTION ISOLATION LEVEL level;
+其中level有4种值：
+level: &#123;
+     REPEATABLE READ
+   | READ COMMITTED
+   | READ UNCOMMITTED
+   | SERIALIZABLE
+&#125;</code></pre>
+<h5 id="关键词：GLOBAL"><a href="#关键词：GLOBAL" class="headerlink" title="关键词：GLOBAL"></a>关键词：GLOBAL</h5><pre><code>SET GLOBAL TRANSACTION ISOLATION LEVELlevel;
+* 只对执行完该语句之后产生的会话起作用
+* 当前已经存在的会话无效</code></pre>
+<h5 id="关键词：SESSION"><a href="#关键词：SESSION" class="headerlink" title="关键词：SESSION"></a>关键词：SESSION</h5><pre><code>SET SESSION TRANSACTION ISOLATION LEVEL level;
+* 对当前会话的所有后续的事务有效
+* 该语句可以在已经开启的事务中间执行，但不会影响当前正在执行的事务
+* 如果在事务之间执行，则对后续的事务有效。</code></pre>
+<h5 id="无关键词"><a href="#无关键词" class="headerlink" title="无关键词"></a>无关键词</h5><pre><code>SET TRANSACTION ISOLATION LEVEL level;
+* 只对当前会话中下一个即将开启的事务有效
+* 下一个事务执行完后，后续事务将恢复到之前的隔离级别
+* 该语句不能在已经开启的事务中间执行，会报错的</code></pre>
+<h4 id="方式2：通过服务启动项命令"><a href="#方式2：通过服务启动项命令" class="headerlink" title="方式2：通过服务启动项命令"></a>方式2：通过服务启动项命令</h4><blockquote>
+<p>可以修改启动参数transaction-isolation的值</p>
+<p>比方说我们在启动服务器时指定了–transaction-isolation=READ UNCOMMITTED，那么事务的默认隔离级别就从原来的REPEATABLE READ变成了READ UNCOMMITTED。</p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>彻底搞懂 MySQL 事务的隔离级别</p><p><a href="http://yoursite.com/2020/12/30/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%20MySQL%20%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">http://yoursite.com/2020/12/30/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%20MySQL%20%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>蛋清小记</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-12-30</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2020-12-30</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags size-small mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Mysql/">Mysql</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">数据库事务</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/12/30/6.%E7%A1%AE%E5%AE%9A%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/"><i class="level-item fas fa-chevron-left"></i><span class="level-item"> </span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/12/30/%E3%80%90%E5%B9%B2%E8%B4%A7%E3%80%91Chrome%E6%8F%92%E4%BB%B6(%E6%89%A9%E5%B1%95)%E5%BC%80%E5%8F%91%E5%85%A8%E6%94%BB%E7%95%A5/"><span class="level-item">【干货】Chrome插件(扩展)开发全攻略</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="is-flex" href="#事前准备数据"><span class="mr-2">1</span><span>事前准备数据</span></a></li><li><a class="is-flex" href="#事务并发可能出现的情况"><span class="mr-2">2</span><span>事务并发可能出现的情况</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#脏读（Dirty-Read）"><span class="mr-2">2.1.1</span><span>脏读（Dirty Read）</span></a></li><li><a class="is-flex" href="#不可重复读（Non-Repeatable-Read）"><span class="mr-2">2.1.2</span><span>不可重复读（Non-Repeatable Read）</span></a></li><li><a class="is-flex" href="#幻读（Phantom）"><span class="mr-2">2.1.3</span><span>幻读（Phantom）</span></a></li></ul></ul></li><li><a class="is-flex" href="#事务的隔离级别"><span class="mr-2">3</span><span>事务的隔离级别</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#读未提交（READ-UNCOMMITTED）"><span class="mr-2">3.1.1</span><span>读未提交（READ UNCOMMITTED）</span></a></li><li><a class="is-flex" href="#读已提交（READ-COMMITTED）"><span class="mr-2">3.1.2</span><span>读已提交（READ COMMITTED）</span></a></li><li><a class="is-flex" href="#可重复读（REPEATABLE-READ）"><span class="mr-2">3.1.3</span><span>可重复读（REPEATABLE READ）</span></a></li><li><a class="is-flex" href="#可串行化（SERIALIZABLE）"><span class="mr-2">3.1.4</span><span>可串行化（SERIALIZABLE）</span></a></li></ul></ul></li><li><a class="is-flex" href="#隔离级别的实现原理"><span class="mr-2">4</span><span>隔离级别的实现原理</span></a></li><li><a class="is-flex" href="#查看当前会话隔离级别"><span class="mr-2">5</span><span>查看当前会话隔离级别</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#方式1"><span class="mr-2">5.1.1</span><span>方式1</span></a></li><li><a class="is-flex" href="#方式2"><span class="mr-2">5.1.2</span><span>方式2</span></a></li></ul></ul></li><li><a class="is-flex" href="#设置隔离级别"><span class="mr-2">6</span><span>设置隔离级别</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#无关键词"><span class="mr-2">6.1.1</span><span>无关键词</span></a></li><li><a class="is-flex" href="#方式2：通过服务启动项命令"><span class="mr-2">6.1.2</span><span>方式2：通过服务启动项命令</span></a></li></ul></ul></li></ul></div></div><style>.menu-list > li > a.is-active + .menu-list { display: block; }.menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><a class="media-left" href="/2020/12/30/1.%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="1.机器语言与机器指令"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/1.%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/">1.机器语言与机器指令</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/2.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="2.计算机的组成"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/2.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/">2.计算机的组成</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/3.%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E4%B8%8E%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="3.内存读写与内存空间"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/3.%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E4%B8%8E%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/">3.内存读写与内存空间</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/4.%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="4.寄存器与数据存储"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/4.%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">4.寄存器与数据存储</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/5.MOV%E5%92%8CADD%E6%8C%87%E4%BB%A4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="6.MOV和ADD指令"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/5.MOV%E5%92%8CADD%E6%8C%87%E4%BB%A4/">6.MOV和ADD指令</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Chrome%E6%8F%92%E4%BB%B6/"><span class="level-start"><span class="level-item">Chrome插件</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="level-start"><span class="level-item">数据库</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span class="level-start"><span class="level-item">汇编语言</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Mysql/"><span class="tag">Mysql</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="tag">数据库</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/"><span class="tag">数据库事务</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/"><span class="tag">汇编指令</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span class="tag">汇编语言</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E8%B7%A8%E5%9F%9F/"><span class="tag">跨域</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="蛋清小记" height="28"></a><p class="size-small"><span>&copy; 2020 蛋清小记</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'http://yoursite.com',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

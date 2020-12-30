@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>标签: 汇编指令 - 蛋清小记</title><meta property="og:type" content="blog"><meta property="og:title" content="蛋清小记"><meta property="og:url" content="http://yoursite.com/"><meta property="og:site_name" content="蛋清小记"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://yoursite.com/img/og_image.png"><meta property="article:author" content="蛋清小记"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://yoursite.com"},"headline":"蛋清小记","image":["http://yoursite.com/img/og_image.png"],"author":{"@type":"Person","name":"蛋清小记"},"description":""}</script><link rel="icon" href="https://img.alicdn.com/imgextra/i2/3484326495/O1CN010Q7a1S1xql4AaZ5zA_!!3484326495-2-daren.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><meta name="generator" content="Hexo 5.1.1"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="蛋清小记" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/tags">标签</a></li><li class="is-active"><a href="#" aria-current="page">汇编指令</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></span><span class="level-item">3 分钟读完 (大约524个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/30/1.%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/">1.机器语言与机器指令</a></h1><div class="content"><h3 id="机器语言和机器指令"><a href="#机器语言和机器指令" class="headerlink" title="机器语言和机器指令"></a>机器语言和机器指令</h3><p>机器语言就是机器指令的集合。机器指令是一条集算计可以正确执行的命令，机器指令由一串二进制数表示，比如说 <code>00100100</code>，但是如果让我们手动的去写这种机器指令的话，一旦写错估计需要个把月才能找到程序到底错那了，而这时出现了汇编语言。</p>
+<h3 id="汇编语言"><a href="#汇编语言" class="headerlink" title="汇编语言"></a>汇编语言</h3><p>汇编语言的主体是汇编指令。汇编指令和机器指令的差别在于指令的表示方法上，汇编指令其实就是机器指令便于记忆的书写格式，是机器指令的助记符。比如说：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">机器指令：10010011010101</span><br><span class="line">操作： 将寄存器BX的内容送到AX中</span><br><span class="line">汇编指令：MOV AX,BX </span><br><span class="line"></span><br><span class="line">实现了相同的功能，但是对于我们来讲汇编指令易懂并且便于记忆。</span><br></pre></td></tr></table></figure>
+<p>上面的介绍中提到，汇编指令其实就是机器指令的一种书写格式而已，实际上还是机器指令，当我们编写汇编指令时，会通过编译器将我们的汇编指令写成的源程序编译成机器码，然后才会交给计算机进行执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[程序员]--编写--&gt;B[汇编指令];</span><br><span class="line">B--&gt;C[编译器];</span><br><span class="line">C--编译--&gt;D[机器指令];</span><br><span class="line">D--执行--&gt;F[计算机];</span><br></pre></td></tr></table></figure>
+
+<p>汇编指令又分为汇编指令、伪指令和其他符号：</p>
+<ul>
+<li>汇编指令也就是机器码的助记符，其会通过编译器转成机器指令交给计算机执行的</li>
+<li>伪指令本身不是计算机能够直接执行的，它会在当汇编指令通过编译器转机器码的过程中执行。</li>
+<li>其他符号也由编译器执行<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg &#x2F;&#x2F; 伪指令</span><br><span class="line">codesg segment</span><br><span class="line">start:           &#x2F;&#x2F; 其他符号</span><br><span class="line">    mov ax,0123H &#x2F;&#x2F; 汇编指令</span><br><span class="line">    mov bx,0456H</span><br><span class="line">    add ax,bx </span><br><span class="line">    add ax,ax</span><br><span class="line">    </span><br><span class="line">    mov ax,4c00h</span><br><span class="line">    int 21h</span><br><span class="line">codesg ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></span><span class="level-item">7 分钟读完 (大约1087个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/30/2.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/">2.计算机的组成</a></h1><div class="content"><h3 id="“解刨”-计算机"><a href="#“解刨”-计算机" class="headerlink" title="“解刨” 计算机"></a>“解刨” 计算机</h3><p>计算机的核心就是主板，主板上有：</p>
+<ul>
+<li>CPU(中央处理器)</li>
+<li>总线(在多个部件之间进行传输数据、传输指令)</li>
+<li>内存(工作过程中保存数据)</li>
+<li>拓展槽(连接外部设备,比如说显示器、打印机)</li>
+</ul>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><p>CPU是计算机的核心部件，它控制整个计算机的运作并进行运算。想要让一个CPU工作，就必须向他提供指令和数据。而指令和数据会放在存储器中(内存)，所以离开了内存，性能再好的CPU也无法工作。</p>
+<h3 id="指令和数据的表示"><a href="#指令和数据的表示" class="headerlink" title="指令和数据的表示"></a>指令和数据的表示</h3><p>计算机中是数据和指令，都会存储在内存或者磁盘上(也可以叫外存)。<br>当永久性存储时会将数据和指令存储在磁盘上，但是当计算机在开始运行时CPU中所需用到数据就都必须从磁盘中读取到内存中，然后由CPU和内存进行交互执行。<br>数据和指令都是二进制信息，那么<code>10011010110</code>是指令还是数据呢？它可以是指令也可以是数据，具体是什么就看CPU怎么用它。</p>
+<p>数据的表示：</p>
+<table>
+<thead>
+<tr>
+<th>示例</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001B</td>
+<td>二进制数，由B作为后缀</td>
+</tr>
+<tr>
+<td>89D8H</td>
+<td>十六进制数，由H作后缀或者0x为前缀</td>
+</tr>
+<tr>
+<td>1007O</td>
+<td>八进制数，由0作为后缀</td>
+</tr>
+<tr>
+<td>3627D</td>
+<td>十进制数，由D作为后缀</td>
+</tr>
+</tbody></table>
+<p>数据量：B、KB、MB、GB、TB、PB…</p>
+<p>1024B = 1KB</p>
+<p>1024KB = 1MB </p>
+<p>… 以 1024 为进制。</p>
+<h3 id="存储单元"><a href="#存储单元" class="headerlink" title="存储单元"></a>存储单元</h3><p>不管是数据还是指令都要存放到存储器(内存)中，而存储器被划分为若干个存储单元，每个存储单元中存放一个字节的数据(0000 0000),每个存储单元从<code>0</code>开始顺序编号；<br>假设一个存储器有 <code>128</code> 个存储单元，那么他的编号就是 <code>0 ~ 127</code> 如下示例：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>存储单元</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>127</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>上面的表格表示了一个拥有 <code>128</code> 个存储单元的内存模拟图，而实际上内存空间很”大”,<code>8086</code>处理器的有<code>20</code>条数据线，寻址空间也就是2的20次方，也就是<code>1MB</code>,那么他的模拟图就是这样的：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>存储单元</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>FFFFFH</td>
+<td></td>
+</tr>
+<tr>
+<td>注：1个F最大就是15，而2进制中15表示 0000 ，所以 5个F就是 0000 0000 0000 0000 0000。</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="计算机中的总线："><a href="#计算机中的总线：" class="headerlink" title="计算机中的总线："></a>计算机中的总线：</h3><p>在计算机中专门有链接CPU和其他芯片的导线，通常称为总线。总线在物理上就是一根一根的导线的集合。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/BhjmLQ"><img src="https://s1.ax1x.com/2020/11/07/BhjmLQ.png" alt="BhjmLQ.png"></a><br>总线在逻辑上又分为：</p>
+<ul>
+<li>地址总线</li>
+<li>数据总线</li>
+<li>控制总线</li>
+</ul>
+<h6 id="地址总线："><a href="#地址总线：" class="headerlink" title="地址总线："></a>地址总线：</h6><p>CPU是通过地址总线来指定存储单元的。所以地址总线的宽度，决定了可寻址的存储单元大小。有N根地址总线(宽度为N)，那么对应的寻址空间就是2的N次方。</p>
+<p>比如说，地址总线的宽度是4，也就是有4根导线是作为地址总线使用的，那么他一次最多只能传输最大的地址就是15(0000)。</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BhjhFI"><img src="https://s1.ax1x.com/2020/11/07/BhjhFI.png" alt="BhjhFI.png"></a></p>
+<p>假设你的CPU有16根地址总线，那么你的寻址空间就是2的16次方也就是64kb。</p>
+<h6 id="数据总线"><a href="#数据总线" class="headerlink" title="数据总线"></a>数据总线</h6><p>CPU与内存或者其他器件之间的数据传送是通过数据总线来进行的。数据总线的宽度决定了CPU和外界的数据传送速度。</p>
+<p>比如说：数据总线的宽度是4，我一次性能够传递 0000 ，也就是4个二进制位的数出去，最大依然是15，那么假如我要传输个16怎么办，我是不是要分两次传，传两次肯定比传一次慢，所以数据总线的宽度决定了CPU和外界数据传送的速度。</p>
+<h6 id="控制总线"><a href="#控制总线" class="headerlink" title="控制总线"></a>控制总线</h6><p>CPU通过控制总线对外部器件进行控制。控制总线是一些不同控制线的集合，控制总线的宽度决定了CPU对外部器件的控制能力。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></span><span class="level-item">8 分钟读完 (大约1186个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/30/3.%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E4%B8%8E%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/">3.内存读写与内存空间</a></h1><div class="content"><h3 id="CPU对存储器的读写"><a href="#CPU对存储器的读写" class="headerlink" title="CPU对存储器的读写"></a>CPU对存储器的读写</h3><p>CPU想要进行数据的读写，必须和外部期间进行三类信息的交互：</p>
+<ul>
+<li>存储单元的地址(地址信息)<ul>
+<li>也就是你要在什么地方操作</li>
+</ul>
+</li>
+<li>器件的选择，读或写命令(控制信息)<ul>
+<li>也就是你要在存储单元上干什么，读或者写 </li>
+</ul>
+</li>
+<li>读或写的数据(数据信息)<ul>
+<li>你要操作什么数据</li>
+</ul>
+</li>
+</ul>
+<p>比如说，我要在 <code>0xF</code>(地址信息) 这个地址的存储单元上写入(控制信息) <code>0xF1</code>(数据信息) 的数据。那么他的流程大概就是这样的：</p>
+<ol>
+<li>CPU读取我们的地址信息 <code>0xF</code> 然后通过地址总线找到内存中这个地址指向的存储单元</li>
+<li>通过控制总线进行控制读或者写的操作，我们这里是写入，所以就是发出写的操作指令</li>
+<li>通过数据总线把数据给出去</li>
+</ol>
+<h3 id="内存地址空间"><a href="#内存地址空间" class="headerlink" title="内存地址空间"></a>内存地址空间</h3><p>从上面CPU对存储器的操作中发现，我们对存储单元的读写会通过地址总线找到相应的地址，那么这个地址是如何找到的呢？这时候就引出了内存地址空间的概念。</p>
+<p>CPU地址总线宽度为N，寻址空间就是2的N次方的字节。8086CPU的地址总线为20，它可以寻址1M个内存单元，这1MB个可寻到的内存单元就构成这个CPU的内存地址空间。</p>
+<p>从CPU角度看地址空间分配：</p>
+<ul>
+<li>RAM(随机存储器)<ul>
+<li>特点：能读能写，缺点就是当机器一断电，里面的信息就会全部丢失，一般 <code>RAM</code> 存储的数据就是在计算机运行时动态变化的数据</li>
+<li>RAM有很多种类，主要有插入主板上的RAM和拓展槽上的RAM(比如显卡)</li>
+</ul>
+</li>
+<li>ROM(只读存储器)<ul>
+<li>只能从里面读数据，而不能进行写数据，它里面的数据是在造计算机时就已经写好了，相当于在制造计算机时在里面定义了很多 <code>final</code> 的常量，一般存储在计算器启动时就需要用的数据或者在使用时固定的不变的数据。</li>
+<li>主要是系统BIOS，接口卡上的BIOS</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B4qbt0"><img src="https://s1.ax1x.com/2020/11/07/B4qbt0.png" alt="B4qbt0.png"></a></p>
+<blockquote>
+<p>在上图中，有绿色底座的代表插在拓展槽上的存储器，没有绿色底座的代表插在主板上的存储器</p>
+</blockquote>
+<p>现在我们将各类存储器看作为一个逻辑存储器，也就是我们把它们想象成一个整体，然后进行统一编址(存储地址)，多个物理存储器我们把它们看作一个其中由若干存储单元组成的逻辑存储器。每个物理存储器在这个逻辑存储器中占有一个地址段，也就是一段地址空间。</p>
+<p>这个时候我们就不需要考虑我们要操作什么设备的什么地址了，直接说你要操作什么地址，自然那个地址就是相应的存储器的。</p>
+<p>比如说：有内存还有显存，那么把它们想象成一个整体，其中内存占有位置从0-15，显存占有位置16-30，那么现在我说我要读写内存地址为17的主存储器，那么是不是自然而然就知道我是要操作显存而不是内存。</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B4jKE9"><img src="https://s1.ax1x.com/2020/11/07/B4jKE9.png" alt="B4jKE9.png"></a></p>
+<p>在上图中，我们把各种类型<code>RAM</code>、<code>ROM</code>，都看作一个整体，每个存储器又占有一段地址空间，当我们操作具体某个地址段时自然而然就知道是在操作谁。</p>
+<h6 id="8086系统案例："><a href="#8086系统案例：" class="headerlink" title="8086系统案例："></a>8086系统案例：</h6><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5CMLV"><img src="https://s1.ax1x.com/2020/11/07/B5CMLV.png" alt="B5CMLV.png"></a></p>
+<hr>
+<p>注：<code>BIOS</code> 就是固化到ROM芯片的程序，保存着计算机最重要、最基本的输入输出程序，系统自启动，自检程序，为计算机提供了最底层的，最直接的硬件设置和控制。此外还向作业系统提供了一些系统参数。系统硬件的变化是由BIOS隐藏，程序使用BIOS功能而不是直接控制硬件。现代作业系统会忽略BIOS提供的抽象层并直接控制硬件组件。</p>
+<p>来源：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/bios/91424">https://baike.baidu.com/item/bios/91424</a></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></span><span class="level-item">7 分钟读完 (大约1032个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/30/4.%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">4.寄存器与数据存储</a></h1><div class="content"><h3 id="CPU的组成"><a href="#CPU的组成" class="headerlink" title="CPU的组成"></a>CPU的组成</h3><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5i1C4"><img src="https://s1.ax1x.com/2020/11/07/B5i1C4.png" alt="B5i1C4.png"></a><br>CPU中由运算器进行信息处理，这个运算器主要指的是 <code>ALU</code> 算术逻辑单元</p>
+<p>CPU通过 <code>BUS</code> 总线，来和内存进行交互</p>
+<p>CPU工作时由寄存器进行信息存储，图中，橘黄色以及青色就是我们这里讲的寄存器。寄存器就是计算机内部用来存储数据的单元。</p>
+<p>由控制器进行协调各种器件进行工作，图中，亮黄色与绿色就是这里讲的控制器。</p>
+<p>由内部总线实现CPU内，各个器件之间的联系。</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>8086CPU有14个寄存器，分别是：</p>
+<ul>
+<li>通用寄存器：AX、BX、CX、DX</li>
+<li>变址寄存器：SI、DI</li>
+<li>指令指针寄存器：IP</li>
+<li>指针寄存器：SP、BP</li>
+<li>段寄存器：CS、SS、DS、ES</li>
+<li>标志寄存器: PSW</li>
+</ul>
+<p>它们的共性：<br>8086CPU所有的寄存器都是 <code>16</code> 位的，也就是可以存放两个字节的数据。</p>
+<h4 id="通用寄存器-以AX为例"><a href="#通用寄存器-以AX为例" class="headerlink" title="通用寄存器-以AX为例"></a>通用寄存器-以AX为例</h4><p>一个16位的寄存器可存储一个16位的数据，**<strong>所以它能够存储的最大值就是2的16次方**</strong>-1<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5FSz9"><img src="https://s1.ax1x.com/2020/11/07/B5FSz9.png" alt="B5FSz9.png"></a></p>
+<p>比如说: 我们在AX中存储 <code>18D</code> 的数据，D代表十进制的数，也就是 <code>10010B</code><br><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5FBwV"><img src="https://s1.ax1x.com/2020/11/07/B5FBwV.png" alt="B5FBwV.png"></a></p>
+<h4 id="寄存器兼容性问题"><a href="#寄存器兼容性问题" class="headerlink" title="寄存器兼容性问题"></a>寄存器兼容性问题</h4><p>刚才举例使用了 8086CPU ，它所使用的寄存器是16位的，但是8086上一代CPU中的寄存器都是8位的，如何保证程序的兼容性是一个问题，总不能说我以前写的程序，你更新了一下系统我全部白干了对吧。</p>
+<p>现代计算机的解决方案：<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5klc9"><img src="https://s1.ax1x.com/2020/11/07/B5klc9.png" alt="B5klc9.png"></a><br>通用寄存器均可以分为两个独立的8位寄存器使用，也就是1个AX(16位寄存器)内部可以分为AH和AL，两个8位的寄存器，其中AH代表了高8位，AL代表了低8位，当读写AH时就代表了向AX的高八位进行读写，如果读写AL时就代表向AX的第八位进行读写。</p>
+<blockquote>
+<p>注意：这里讲的可以分为两个独立的8位寄存器使用只是我们把一个16位的高8位和低8位<strong>看成</strong>两个8位的寄存器，而不是16寄存器由两个8位寄存器组成！</p>
+</blockquote>
+<p>比如说：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B5AkCD"><img src="https://s1.ax1x.com/2020/11/07/B5AkCD.png" alt="B5AkCD.png"></a></p>
+<p>图中，向AX中存入了一个 <code>20000D</code> 十进制数，在AX中看到就是那么长的二进制数，但在AH中也就是AX的高八位中就是78D，在AL也就是AX的低八位看到就是32。这就相当于我有一个车库，有16个车位，我就可以它分为两个各有8个车位的车库租出去，当然也可以分为有4个车位的车库租出去，但是计算机中都是一个字节的存储，没有那存半个字节的。</p>
+<p>所以通用寄存器中：</p>
+<ul>
+<li>AX可以分为 AH 和 AL</li>
+<li>BX可以分为 BH 和 BL </li>
+<li>CX可以分为 CH 和 CL </li>
+<li>DX可以分为 DH 和 DL </li>
+</ul>
+<blockquote>
+<p>发现了吧，都是什么H，什么L结尾的，H其实代表的是 high(高) L就是 low(低)</p>
+</blockquote>
+<h4 id="“字”在寄存器中的存储"><a href="#“字”在寄存器中的存储" class="headerlink" title="“字”在寄存器中的存储"></a>“字”在寄存器中的存储</h4><p>8086是16位的CPU，那么我们就可以说8086的**字长(word size)**是16位，所以说它是多少位的CPU，那么其实讲的就是它的字长是多少位的。</p>
+<p>一个<strong>字</strong>(word)可以存在一个16位寄存器中，这个字的高位字节存在这个寄存器的高8位，这个字的地位字节存在这个寄存器的低8位寄存器</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>发表</span><span class="level-item"><time dateTime="2020-12-30T07:06:44.525Z" title="2020-12-30T07:06:44.525Z">2020-12-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></span><span class="level-item">2 分钟读完 (大约343个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/30/5.MOV%E5%92%8CADD%E6%8C%87%E4%BB%A4/">6.MOV和ADD指令</a></h1><div class="content"><table>
+<thead>
+<tr>
+<th>汇编指令</th>
+<th>控制CPU完成的操作</th>
+<th>用高级语言的语法描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mov ax,18</td>
+<td>将18送入AX</td>
+<td>AX = 18</td>
+</tr>
+<tr>
+<td>mov ah,78</td>
+<td>将78送入AH</td>
+<td>AH = 78</td>
+</tr>
+<tr>
+<td>add ax,8</td>
+<td>将寄存器AX中的数值加上8</td>
+<td>AX = AX + 8</td>
+</tr>
+<tr>
+<td>mov ax,bx</td>
+<td>将寄存器BX中的数据送入寄存器AX</td>
+<td>AX = BX</td>
+</tr>
+<tr>
+<td>add ax,bx</td>
+<td>将AX,BX 中的内容相加，结果存入AX中</td>
+<td>AX = AX + BX</td>
+</tr>
+</tbody></table>
+<p>注意：汇编指令不区分大小写</p>
+<p>小测：<br>程序段中的指令 | 执行后AX的数据 | 执行后BX的数据 | 含义解析<br>—|—|—|—<br>mov ax,001AH | 001AH | 0000H | 将 001AH 送入 ax<br>mov bx,0026H | 001AH | 0026H | 将 0026H 送入 bx<br>add al,bl    | 0040H | 0026H | 将 ax 的低八位与 bx 的低八位 相加并送入 ax 的低八位<br>add ah,bl    | 2640H | 0026H | 将 ax 的高八位与 bx 的低八位 相加并送入 ax 的高八位<br>add bh,al    | 2640H | 4026H | 将 bx 的高八位与 ax 的低八位 相加并送入 bx 的高八位<br>mov ah,0     | 0040H | 4026H | 将 0 送入 ax 的高八位<br>add al,85H   | 00C5H | 4026H | 将 ax 的低八位与 85H 相加并送入 ax 的低八位<br>add al,93H   | 0058H | 4026H | 这里原结果是 <code>85H + 93H = 158H</code> 但是由于我们使用的是 al(ax的低八位)，而al也只是一个8位的寄存器，产生的进位也只能舍弃最终结果就是 <code>58H</code> </p>
+<p>设原AX、BX中的值均为 <code>0000H</code></p>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="https://img.alicdn.com/imgextra/i2/3484326495/O1CN010Q7a1S1xql4AaZ5zA_!!3484326495-2-daren.png" alt="蛋清小记"></figure><p class="title is-size-4 is-block line-height-inherit">蛋清小记</p><p class="is-size-6 is-block">不积小流,无以成江海。</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州·中国</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">6</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Chrome%E6%8F%92%E4%BB%B6/"><span class="level-start"><span class="level-item">Chrome插件</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="level-start"><span class="level-item">数据库</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span class="level-start"><span class="level-item">汇编语言</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><!--!--><div class="card widget"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><a class="media-left" href="/2020/12/30/1.%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="1.机器语言与机器指令"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/1.%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/">1.机器语言与机器指令</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/2.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="2.计算机的组成"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/2.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/">2.计算机的组成</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/3.%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E4%B8%8E%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="3.内存读写与内存空间"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/3.%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E4%B8%8E%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/">3.内存读写与内存空间</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/4.%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="4.寄存器与数据存储"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/4.%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">4.寄存器与数据存储</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article><article class="media"><a class="media-left" href="/2020/12/30/5.MOV%E5%92%8CADD%E6%8C%87%E4%BB%A4/"><p class="image is-64x64"><img class="fill" src="https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg" alt="6.MOV和ADD指令"></p></a><div class="media-content size-small"><p><time dateTime="2020-12-30T07:06:44.525Z">2020-12-30</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/30/5.MOV%E5%92%8CADD%E6%8C%87%E4%BB%A4/">6.MOV和ADD指令</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">汇编语言</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2020/12/"><span class="level-start"><span class="level-item">十二月 2020</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Mysql/"><span class="tag">Mysql</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="tag">数据库</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/"><span class="tag">数据库事务</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4/"><span class="tag">汇编指令</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span class="tag">汇编语言</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E8%B7%A8%E5%9F%9F/"><span class="tag">跨域</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="蛋清小记" height="28"></a><p class="size-small"><span>&copy; 2020 蛋清小记</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'http://yoursite.com',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
