@@ -1,0 +1,18 @@
+sidebar:
+    left:
+        sticky: true
+    right:
+        sticky: true
+widgets:
+  -
+    position: right
+    type: toc
+  -
+    position: right
+    type: recent_posts
+  -
+    position: right
+    type: categories
+  -
+    position: right
+    type: tags
